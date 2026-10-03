@@ -53,7 +53,7 @@ that's already in the repo; the others arrive with their module. Each row says w
 | `hashlib` | content hashes for freshness, proposal versions | `SHA256` | 2, 5 |
 | `itertools` | batching, chunk windows | LINQ `Chunk`, `Zip` | 2 |
 | `collections` (`Counter`, `defaultdict`, `deque`) | BM25 term counts, histories | `Dictionary`, `Queue` | 2 |
-| `math`, `statistics` | cosine similarity, median latency | `Math`, LINQ aggregates | 2, 6 |
+| `math`, `statistics` | median latency, cosine similarity | `Math`, LINQ aggregates | 1.3 (pillars), 2, 6 |
 | `sqlite3` | local vector/keyword store, activity log | `Microsoft.Data.Sqlite` | 2, 5 |
 | `uuid` | idempotency keys, request ids | `Guid` | 3 |
 | `contextlib` | `asynccontextmanager`, `suppress` | `using` helpers | 3 |
