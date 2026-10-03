@@ -1,0 +1,52 @@
+{
+  // F5 debugging (C#: launchSettings.json profiles). Set breakpoints anywhere, including tests.
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "doubleagent ask",
+      "type": "debugpy",
+      "request": "launch",
+      "module": "doubleagent.cli",
+      "args": ["ask", "${input:question}"],
+      "envFile": "${workspaceFolder}/.env",
+      "console": "integratedTerminal",
+      "justMyCode": true
+    },
+    {
+      "name": "doubleagent agent",
+      "type": "debugpy",
+      "request": "launch",
+      "module": "doubleagent.cli",
+      "args": ["agent", "${input:question}"],
+      "envFile": "${workspaceFolder}/.env",
+      "console": "integratedTerminal",
+      "justMyCode": false
+    },
+    {
+      "name": "doubleagent compare",
+      "type": "debugpy",
+      "request": "launch",
+      "module": "doubleagent.cli",
+      "args": ["compare"],
+      "envFile": "${workspaceFolder}/.env",
+      "console": "integratedTerminal"
+    },
+    {
+      "name": "Debug current test file",
+      "type": "debugpy",
+      "request": "launch",
+      "module": "pytest",
+      "args": ["${file}", "-q"],
+      "console": "integratedTerminal",
+      "justMyCode": false
+    }
+  ],
+  "inputs": [
+    {
+      "id": "question",
+      "type": "promptString",
+      "description": "Question for DoubleAgent",
+      "default": "Can we order hydraulics from Globex?"
+    }
+  ]
+}

@@ -1,0 +1,52 @@
+[
+  {
+    "id": "SUP-001",
+    "name": "Globex Corporation",
+    "country": "US",
+    "status": "active",
+    "categories": ["fasteners", "hydraulics"],
+    "payment_terms_days": 30,
+    "contact_email": "orders@globex.example",
+    "last_updated": "2026-09-12"
+  },
+  {
+    "id": "SUP-002",
+    "name": "Initech Components",
+    "country": "IN",
+    "status": "on_hold",
+    "categories": ["electronics"],
+    "payment_terms_days": 45,
+    "contact_email": "sales@initech.example",
+    "last_updated": "2026-08-30"
+  },
+  {
+    "id": "SUP-003",
+    "name": "Umbrella Safety Supplies",
+    "country": "GB",
+    "status": "active",
+    "categories": ["ppe", "safety"],
+    "payment_terms_days": 60,
+    "contact_email": "uk@umbrella-safety.example",
+    "last_updated": "2026-09-28"
+  },
+  {
+    "id": "SUP-004",
+    "name": "Stark Precision Tools",
+    "country": "DE",
+    "status": "pending",
+    "categories": ["tooling", "fasteners"],
+    "payment_terms_days": 30,
+    "contact_email": "einkauf@stark-tools.example",
+    "last_updated": "2026-10-01"
+  },
+  {
+    "id": "SUP-005",
+    "name": "Globex Corp Ltd",
+    "country": "GB",
+    "status": "active",
+    "categories": ["hydraulics"],
+    "payment_terms_days": 30,
+    "contact_email": "uk.orders@globex.example",
+    "last_updated": "2026-07-04"
+  }
+]

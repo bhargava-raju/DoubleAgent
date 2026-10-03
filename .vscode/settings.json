@@ -1,0 +1,32 @@
+{
+  // VS Code auto-detects the uv-managed .venv after `uv sync`; if not, run
+  // "Python: Select Interpreter" and pick ./.venv (Windows: .venv\Scripts\python.exe).
+  "python.terminal.activateEnvironment": true,
+
+  // Pylance = the same type checker as pyright. "standard" matches pyproject.toml.
+  "python.analysis.typeCheckingMode": "standard",
+  "python.analysis.autoImportCompletions": true,
+  "python.analysis.inlayHints.functionReturnTypes": true,
+  "python.analysis.inlayHints.variableTypes": true,
+
+  // Test Explorer runs pytest (C#: Test Explorer + xUnit).
+  "python.testing.pytestEnabled": true,
+  "python.testing.unittestEnabled": false,
+  "python.testing.pytestArgs": ["tests"],
+
+  // Ruff formats and fixes imports on save (C#: dotnet format on save).
+  "[python]": {
+    "editor.defaultFormatter": "charliermarsh.ruff",
+    "editor.formatOnSave": true,
+    "editor.codeActionsOnSave": {
+      "source.fixAll.ruff": "explicit",
+      "source.organizeImports.ruff": "explicit"
+    }
+  },
+  "editor.rulers": [100],
+  "files.exclude": {
+    "**/__pycache__": true,
+    "**/.pytest_cache": true,
+    "**/.ruff_cache": true
+  }
+}

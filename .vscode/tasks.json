@@ -1,0 +1,29 @@
+{
+  // Ctrl+Shift+B runs the quality gate (C#: dotnet build + dotnet test).
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "check: format + lint + types + tests",
+      "type": "shell",
+      "command": "uv run ruff format . && uv run ruff check . && uv run pyright && uv run pytest -q",
+      "group": { "kind": "build", "isDefault": true },
+      "problemMatcher": []
+    },
+    {
+      "label": "test: current module",
+      "type": "shell",
+      "command": "uv run pytest -q tests/${input:module}",
+      "group": "test",
+      "problemMatcher": []
+    }
+  ],
+  "inputs": [
+    {
+      "id": "module",
+      "type": "pickString",
+      "description": "Which module's tests?",
+      "options": ["module01"],
+      "default": "module01"
+    }
+  ]
+}
