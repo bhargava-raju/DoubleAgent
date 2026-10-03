@@ -9,6 +9,7 @@ dependencies = [
     "anthropic>=1.11.0",
     "pydantic>=2.13.5",
     "pydantic-settings>=2.15.0",
+    "streamlit>=1.65.0",
 ]
 
 [project.scripts]

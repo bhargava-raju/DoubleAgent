@@ -69,6 +69,9 @@ activated for you, so plain `pytest` or `python` also work there.
 uv run doubleagent ask "What is an AI agent?"
 uv run doubleagent agent "Can we order hydraulics from Globex?"
 uv run doubleagent compare
+uv run streamlit run src/doubleagent/ui/app.py     # the UI, at http://localhost:8501
 ```
+
+In VS Code: F5 → **DoubleAgent UI (Streamlit)**, or the task **ui: run DoubleAgent UI**.
 
 These raise `NotImplementedError` until you complete the Module 1 exercises.

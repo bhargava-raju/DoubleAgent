@@ -5,7 +5,8 @@ a procurement assistant agent for a fictional company, Acme Industrial.
 
 The path follows the 8 modules of the Reference *AI Agents for Enterprises* syllabus, Python track.
 It is built on the Anthropic Python SDK (Claude), then LangChain, LangGraph, Semantic Kernel,
-LangSmith and Langfuse. Every concept is compared with its C# equivalent.
+LangSmith and Langfuse. Every module ends with a UI you can demo, and every concept is
+compared with its C# equivalent.
 
 | Start here | |
 |---|---|
@@ -20,6 +21,7 @@ LangSmith and Langfuse. Every concept is compared with its C# equivalent.
 
 ```
 src/doubleagent/   your code: stubs with TODOs (you write the bodies)
+src/doubleagent/ui the UI (Streamlit now, FastAPI web front end in Module 7)
 tests/moduleNN/    the spec: tests that define "done" for each module (don't edit them)
 tests/fakes.py     fake Claude client so tests need no network or API key
 data/erp/          sample ERP data (suppliers)
@@ -44,7 +46,7 @@ Follow [docs/SETUP.md](docs/SETUP.md): install uv, `uv sync`, copy `.env.example
    Stuck? Set a breakpoint and use **Debug current test file** (F5) instead of guessing.
 5. **Pass the quality gate** (Ctrl+Shift+B):
    `uv run ruff format . && uv run ruff check . && uv run pyright && uv run pytest -q`
-6. **Run it for real** (`uv run doubleagent ...`) and do the lesson's *Experiment*, writing findings in `notes/`.
+6. **Run it for real** (`uv run doubleagent ...` or the Streamlit UI) and do the lesson's *Experiment*, writing findings in `notes/`.
 7. **Work through the Pillars table.** These are the production habits; do at least the 🛡️ and 📏 rows.
 8. **Answer "Check yourself"** in `notes/` without looking anything up.
 9. **Commit and push** (`git push -u origin learn/1.1`), then post in the project thread:

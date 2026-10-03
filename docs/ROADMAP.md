@@ -30,6 +30,7 @@ each framework adds. Tracing and evals use **LangSmith** and **Langfuse**.
 | Orchestration | LangGraph (primary), Semantic Kernel agents/processes (comparison) | a state machine / Durable Functions orchestrator |
 | Eval + tracing | LangSmith and Langfuse (OpenTelemetry) | Application Insights |
 | Durable execution | Temporal | Durable Functions / MassTransit sagas |
+| UI | Streamlit (Modules 1 to 6), FastAPI + Jinja/HTMX (Module 7) | Blazor Server, then ASP.NET Core MVC |
 | Ship | FastAPI + Docker + GitHub Actions | ASP.NET Core + Docker + Azure DevOps |
 
 ## How each lesson works
@@ -40,6 +41,24 @@ each framework adds. Tracing and evals use **LangSmith** and **Langfuse**.
 4. Each lesson's **Pillars** section covers orchestration, context, guardrails, security, evaluation,
    observability, performance and reliability for that step.
 5. Each module ends with the syllabus **deliverable**. Push and ask for a review in the thread.
+
+## A UI at every stage
+
+Every module ends with a **UI lesson** that puts that module's capability in front of a user, so you
+always have something you can demo. The UI grows with the app:
+
+| Module | UI you build | Tech | C# mental model |
+|--------|--------------|------|-----------------|
+| 1 | Chat with the agent (tool calls visible), scorecard tab with a chart | Streamlit | Blazor Server page |
+| 2 | Answers with clickable citations and a source panel; retrieval comparison view | Streamlit | |
+| 3 | Tool permission matrix and a live tool-call log; MCP tool explorer | Streamlit | admin portal |
+| 4 | Streaming responses; the LangGraph diagram with the active node highlighted | Streamlit (streaming) | SignalR progress updates |
+| 5 | Approval inbox: proposal diff, approve/reject, activity timeline | Streamlit multipage | workflow approval screen |
+| 6 | Eval dashboard: scores over time, failing cases, links to traces | Streamlit + LangSmith/Langfuse UIs | test results dashboard |
+| 7 | Production web front end over a FastAPI backend with server-sent events and sign-in | FastAPI + Jinja/HTMX | ASP.NET Core MVC + SignalR |
+| 8 | Your domain pilot's demo UI | your choice from the above | |
+
+UI tests use Streamlit's `AppTest` (≈ bUnit for Blazor), so the UI has specs like everything else.
 
 ## The eight pillars, at every stage
 
@@ -66,6 +85,7 @@ Tokens, context windows, prompting, hallucinations; chatbot vs workflow vs agent
 - 1.2 Chatbot vs workflow vs agent: build the agent loop by hand (supplier lookup tool)
 - 1.3 Model comparison scorecard: quality, latency, cost across Claude models
 - 1.4 The same agent in LangChain and in Semantic Kernel: what frameworks do for you, and what they hide
+- 1.5 UI: a Streamlit chat for your agent, plus a scorecard tab
 
 **Deliverable:** a working first agent (hand-built, LangChain, Semantic Kernel) and a model-comparison scorecard.
 
@@ -85,6 +105,7 @@ Tokens, context windows, prompting, hallucinations; chatbot vs workflow vs agent
 - 2.2 Hybrid retrieval (BM25 + vectors) with LangChain retrievers; answers with source citations
 - 2.3 LLM Wiki: linked Markdown pages and index-based, vectorless retrieval; compare with RAG
 - 2.4 Freshness, contradictory sources, and access boundaries (live data stays in the ERP)
+- 2.5 UI: answers with clickable citations and a source panel
 
 **Deliverable:** a source-linked knowledge assistant and a retrieval comparison worksheet.
 
@@ -105,6 +126,7 @@ Tokens, context windows, prompting, hallucinations; chatbot vs workflow vs agent
 - 3.3 Idempotency keys: preventing duplicate writes
 - 3.4 MCP: expose scoped tools; the model suggests, the service authorizes
 - 3.5 Consuming MCP tools from LangChain (`langchain-mcp-adapters`) and Semantic Kernel plugins
+- 3.6 UI: tool permissions matrix and a live tool-call log
 
 **Deliverable:** supplier lookup and request-creation tools with explicit permissions.
 
@@ -124,6 +146,7 @@ Tokens, context windows, prompting, hallucinations; chatbot vs workflow vs agent
 - 4.2 Specialist roles and routing; confidence-based escalation vs an LLM-router baseline
 - 4.3 Checkpointing and resuming; one agent vs multiple agents (supervisor pattern)
 - 4.4 The same workflow with Semantic Kernel agent orchestration; when to pick which
+- 4.5 UI: streaming steps and the graph view
 
 **Deliverable:** a resumable workflow and a routing evaluation that includes uncertain cases.
 (The syllabus also covers Jev from TypeSafe, which is early access; we use recorded fixtures if available.)
@@ -143,6 +166,7 @@ Tokens, context windows, prompting, hallucinations; chatbot vs workflow vs agent
 - 5.1 Supplier onboarding and purchase-request preparation
 - 5.2 Human-in-the-loop with LangGraph `interrupt()` and resume; approvals tied to a proposal version
 - 5.3 Failure drills: missing documents, duplicate suppliers, prompt injection, a lost ERP response
+- 5.4 UI: the approval inbox
 
 **Deliverable:** an approval-gated supplier workflow with a readable activity record.
 
@@ -162,6 +186,7 @@ Tokens, context windows, prompting, hallucinations; chatbot vs workflow vs agent
 - 6.2 Tracing LangChain/LangGraph runs in LangSmith; datasets and experiments
 - 6.3 The same traces and evals in Langfuse (open source, self-hostable); comparing the two
 - 6.4 LLM-as-judge calibrated by human review; turning a failure into a regression test
+- 6.5 UI: the evaluation dashboard
 
 **Deliverable:** an evaluation scorecard and a trace showing why a run succeeded or failed.
 
@@ -180,6 +205,7 @@ Tokens, context windows, prompting, hallucinations; chatbot vs workflow vs agent
 - 7.1 Temporal workflows and activities; long waits for approvals
 - 7.2 Recovery: check receipts before retrying a write
 - 7.3 FastAPI service in Docker; secrets, access control, budgets, monitoring, rollback
+- 7.4 UI: production web front end on FastAPI (Jinja + HTMX, server-sent events, sign-in)
 
 **Deliverable:** a shareable pilot, an operating checklist, and a recovery demonstration.
 

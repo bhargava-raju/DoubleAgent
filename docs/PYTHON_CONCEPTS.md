@@ -31,6 +31,8 @@ that's already in the repo; the others arrive with their module. Each row says w
 | `TypedDict`, `Annotated` | DTO shapes, attributes on parameters | 4 (LangGraph state) |
 | `asyncio.TaskGroup`, `gather`, timeouts, cancellation | `Task.WhenAll`, `CancellationToken` | 4 |
 | Dunder methods (`__repr__`, `__eq__`, `__hash__`) | `ToString`, `Equals`, `GetHashCode` | 5 |
+| Walrus operator `:=` | `is { } x` patterns, `out var` | 1.5 ✅ |
+| Module attributes as test seams (`monkeypatch.setattr`) | DI seams, Moq setups | 1.5 ✅ |
 | Packaging, entry points, `__main__` | console app, `Main` | 1.1 ✅, 7 |
 
 ## Standard library

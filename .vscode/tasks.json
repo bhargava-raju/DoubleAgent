@@ -10,6 +10,13 @@
       "problemMatcher": []
     },
     {
+      "label": "ui: run DoubleAgent UI",
+      "type": "shell",
+      "command": "uv run streamlit run src/doubleagent/ui/app.py",
+      "isBackground": true,
+      "problemMatcher": []
+    },
+    {
       "label": "test: current module",
       "type": "shell",
       "command": "uv run pytest -q tests/${input:module}",
