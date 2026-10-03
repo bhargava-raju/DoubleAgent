@@ -1,6 +1,6 @@
 # Roadmap
 
-This path follows the 8 modules of the *Vizuara: AI Agents for Enterprises* syllabus,
+This path follows the 8 modules of the *Reference: AI Agents for Enterprises* syllabus,
 using the **Python track throughout** (no n8n) with a coding exercise in every lesson.
 
 ## What you're building

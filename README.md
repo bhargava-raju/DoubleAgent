@@ -3,7 +3,7 @@
 Learn to build production-ready agentic AI applications in Python by building one yourself:
 a procurement assistant agent for a fictional company, Acme Industrial.
 
-The path follows the 8 modules of the Vizuara *AI Agents for Enterprises* syllabus, Python track.
+The path follows the 8 modules of the Reference *AI Agents for Enterprises* syllabus, Python track.
 It is built on the Anthropic Python SDK (Claude), then LangChain, LangGraph, Semantic Kernel,
 LangSmith and Langfuse. Every concept is compared with its C# equivalent.
 
