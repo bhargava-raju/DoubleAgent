@@ -18,7 +18,7 @@ git clone https://github.com/bhargava-raju/DoubleAgent.git
 cd DoubleAgent
 git checkout claude/project-thread-qjq7wy
 uv sync                      # creates .venv and installs exact versions from uv.lock
-cp .env.example .env         # then put your Anthropic API key in .env
+cp .env.example .env         # then choose: Anthropic API key, or your Microsoft Foundry resource
 code .
 ```
 
@@ -75,3 +75,14 @@ uv run streamlit run src/doubleagent/ui/app.py     # the UI, at http://localhost
 In VS Code: F5 → **DoubleAgent UI (Streamlit)**, or the task **ui: run DoubleAgent UI**.
 
 These raise `NotImplementedError` until you complete the Module 1 exercises.
+
+## 6. Using Microsoft Foundry (Azure) instead of an Anthropic key
+
+1. In the Foundry portal, open **Models → Deployments → Deploy** (the same screen as your GPT deployment) and deploy a Claude model from the catalog, e.g.
+   `claude-sonnet-5-5` or `claude-haiku-4-5`. Name the deployment after the model id to keep things simple.
+2. From your resource's **Keys and Endpoint**, copy the key and the resource name (the `my-resource` part of
+   `https://my-resource.services.ai.azure.com`).
+3. In `.env`: `PROVIDER=foundry`, `ANTHROPIC_FOUNDRY_API_KEY=...`, `ANTHROPIC_FOUNDRY_RESOURCE=...`, and
+   `MODEL=<your Claude deployment name>`.
+
+Other models you deploy there, such as `text-embedding-3-small`, come back in Module 2 (embeddings for RAG).

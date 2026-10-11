@@ -21,7 +21,8 @@ def build_parser() -> argparse.ArgumentParser:
 
 
 def main() -> None:
-    """TODO: parse args, load settings, open `async with AsyncAnthropic(...) as client`,
+    """TODO: parse args, load settings, open
+    `async with create_client(settings) as client:` (client.py),
     and dispatch on args.command with a `match` statement (C#: switch expression) to
     llm.ask (1.1), agent.run_agent (1.2) or scorecard.compare_models (1.3).
 

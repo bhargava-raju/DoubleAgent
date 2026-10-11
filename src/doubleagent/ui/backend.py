@@ -6,10 +6,10 @@ C# analogy: an application-service layer that controllers/Blazor components call
 
 from collections.abc import Sequence
 
-from anthropic import AsyncAnthropic  # noqa: F401  (you will need these)
-from pydantic import ValidationError  # noqa: F401
+from pydantic import ValidationError  # noqa: F401  (you will need these)
 
 from doubleagent.agent import AgentResult, run_agent  # noqa: F401
+from doubleagent.client import create_client  # noqa: F401
 from doubleagent.config import get_settings  # noqa: F401
 from doubleagent.erp import SupplierDirectory  # noqa: F401
 from doubleagent.scorecard import ScorecardRow, compare_models  # noqa: F401
@@ -20,14 +20,15 @@ def config_error() -> str | None:
 
     TODO (1.5):
       - clear the settings cache first (`get_settings.cache_clear()`) so a new .env is picked up
-      - try get_settings(); on ValidationError return a message that mentions ANTHROPIC_API_KEY
-        and tells the user how to fix it. Never include the key itself.
+      - try get_settings(); on ValidationError return a message that names the missing setting
+        (e.g. ANTHROPIC_API_KEY) and tells the user how to fix it. Never include a key itself.
     """
     raise NotImplementedError
 
 
 async def answer(question: str, *, model: str, max_turns: int) -> AgentResult:
-    """TODO (1.5): load settings, open an AsyncAnthropic client with `async with`,
+    """TODO (1.5): load settings, open a client with
+    `async with create_client(settings) as client:`,
     and return the result of run_agent(...) over the supplier directory."""
     raise NotImplementedError
 

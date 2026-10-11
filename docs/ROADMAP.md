@@ -21,7 +21,7 @@ each framework adds. Tracing and evals use **LangSmith** and **Langfuse**.
 | Concern | Choice | C# mental model |
 |---------|--------|-----------------|
 | Project/deps | `uv`, `pyproject.toml` | dotnet CLI, `.csproj`, NuGet |
-| LLM | Claude via the official Anthropic Python SDK (`anthropic`), the foundation of every module | an SDK client like `HttpClient` wrappers |
+| LLM | Claude via the official Anthropic Python SDK (`anthropic`), the foundation of every module; called through the Anthropic API or Microsoft Foundry | an SDK client like `HttpClient` wrappers |
 | Data contracts | Pydantic v2 | records + DataAnnotations, validated at runtime |
 | Tests / lint / types | pytest, ruff, pyright | xUnit, analyzers, the compiler |
 | Retrieval | embeddings + BM25 (hybrid), Markdown "LLM Wiki" | Azure AI Search / Lucene |
@@ -101,7 +101,7 @@ Tokens, context windows, prompting, hallucinations; chatbot vs workflow vs agent
 | 🔁 Reliability | SDK timeouts and automatic retries; tool errors returned to the model instead of crashing |
 
 ### Module 2: Enterprise context: RAG + LLM Wiki
-- 2.1 Chunking and embeddings; vector search (by hand, then LangChain document loaders, splitters, vector stores)
+- 2.1 Chunking and embeddings (your Foundry `text-embedding-3-small` deployment); vector search (by hand, then LangChain document loaders, splitters, vector stores)
 - 2.2 Hybrid retrieval (BM25 + vectors) with LangChain retrievers; answers with source citations
 - 2.3 LLM Wiki: linked Markdown pages and index-based, vectorless retrieval; compare with RAG
 - 2.4 Freshness, contradictory sources, and access boundaries (live data stays in the ERP)

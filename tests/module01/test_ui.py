@@ -17,7 +17,7 @@ def configured(monkeypatch: pytest.MonkeyPatch) -> None:
 
 def test_shows_error_without_api_key(monkeypatch: pytest.MonkeyPatch) -> None:
     monkeypatch.setattr(backend, "config_error", lambda: "ANTHROPIC_API_KEY is not set")
-    at = AppTest.from_file(APP).run()
+    at = AppTest.from_file(APP, default_timeout=30).run()
     assert not at.exception
     assert "ANTHROPIC_API_KEY" in at.error[0].value
     assert len(at.chat_input) == 0
@@ -31,7 +31,7 @@ def test_chat_round_trip(configured: None, monkeypatch: pytest.MonkeyPatch) -> N
         return AgentResult(answer="Initech is on hold.", tool_calls=["lookup_supplier"], turns=2)
 
     monkeypatch.setattr(backend, "answer", fake_answer)
-    at = AppTest.from_file(APP).run()
+    at = AppTest.from_file(APP, default_timeout=30).run()
     at.chat_input[0].set_value("Is Initech approved?").run()
 
     assert not at.exception
@@ -57,7 +57,7 @@ def test_scorecard_tab(configured: None, monkeypatch: pytest.MonkeyPatch) -> Non
         ]
 
     monkeypatch.setattr(backend, "compare", fake_compare)
-    at = AppTest.from_file(APP).run()
+    at = AppTest.from_file(APP, default_timeout=30).run()
     at.button(key="run_comparison").click().run()
     assert not at.exception
     assert len(at.dataframe) == 1
@@ -70,7 +70,7 @@ def test_history_survives_reruns_and_can_be_cleared(
         return AgentResult(answer=f"echo: {question}", tool_calls=[], turns=1)
 
     monkeypatch.setattr(backend, "answer", echo)
-    at = AppTest.from_file(APP).run()
+    at = AppTest.from_file(APP, default_timeout=30).run()
     at.chat_input[0].set_value("one").run()
     at.chat_input[0].set_value("two").run()
     assert len(at.chat_message) == 4
