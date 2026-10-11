@@ -4,10 +4,10 @@ C# analogy: an options class bound from appsettings/env vars, validated at start
 """
 
 from functools import lru_cache
-from typing import Literal, Self  # noqa: F401  (you will need these)
+from typing import Literal, Self
 
-from pydantic import Field, SecretStr, model_validator  # noqa: F401  (you will need these)
-from pydantic_settings import BaseSettings, SettingsConfigDict  # noqa: F401
+from pydantic import Field, SecretStr, model_validator
+from pydantic_settings import BaseSettings, SettingsConfigDict
 
 DEFAULT_MODEL = "claude-opus-5-5"
 
@@ -21,31 +21,49 @@ Provider = Literal["anthropic", "foundry"]
 class Settings(BaseSettings):
     """Reads settings from the environment or a `.env` file (names are case-insensitive).
 
-    TODO (1.1):
-      - set `model_config` so values are also read from ".env" and unknown variables are ignored
-        (look up `SettingsConfigDict(env_file=..., extra=...)`)
-      - declare the fields:
-          provider: Provider, defaulting to "anthropic"
-          anthropic_api_key: SecretStr | None, default None
-          anthropic_foundry_api_key: SecretStr | None, default None
-          anthropic_foundry_resource: str | None, default None
-              (the resource name, e.g. "my-resource" for https://my-resource.services.ai.azure.com)
-          model: str, defaulting to DEFAULT_MODEL
-          max_tokens: int, defaulting to 16000, must be > 0 (hint: `Field(gt=0)`)
-      - add a validator that runs after field validation and checks the provider has
-        its credentials:
-          @model_validator(mode="after")
-          def _check_credentials(self) -> Self: ...
-        "anthropic" needs anthropic_api_key; "foundry" needs both foundry fields.
-        Raise ValueError with a message naming the missing environment variable(s);
-        Pydantic turns it into a ValidationError. (C#: IValidateOptions<T>.)
+    Each field binds to the env var of the same name: `max_tokens` <- MAX_TOKENS.
+    Real environment variables win over `.env`, like env vars over appsettings.json in .NET.
     """
+
+    # Class-level config, ≈ `builder.Configuration.AddEnvironmentVariables()` plus a file source.
+    # extra="ignore": other variables in .env (PATH, unrelated keys) are not errors.
+    model_config = SettingsConfigDict(env_file=".env", extra="ignore")
+
+    # `name: type = default` declares a field. Literal allows only the listed strings (≈ an enum).
+    provider: Provider = "anthropic"
+    # SecretStr prints as '**********' in logs and reprs; call .get_secret_value() to read it.
+    anthropic_api_key: SecretStr | None = None
+    anthropic_foundry_api_key: SecretStr | None = None
+    anthropic_foundry_resource: str | None = None
+    model: str = DEFAULT_MODEL
+    # Field(...) adds validation metadata, ≈ [Range(1, int.MaxValue)].
+    max_tokens: int = Field(default=16000, gt=0)
+
+    # Runs after every field is parsed, so it can check cross-field rules (≈ IValidateOptions<T>).
+    # Returning `Self` (the instance) is required for mode="after".
+    @model_validator(mode="after")
+    def _check_credentials(self) -> Self:
+        required: dict[str, object] = (
+            {"ANTHROPIC_API_KEY": self.anthropic_api_key}
+            if self.provider == "anthropic"
+            else {
+                "ANTHROPIC_FOUNDRY_API_KEY": self.anthropic_foundry_api_key,
+                "ANTHROPIC_FOUNDRY_RESOURCE": self.anthropic_foundry_resource,
+            }
+        )
+        # A list comprehension: ≈ required.Where(kv => kv.Value is null).Select(kv => kv.Key).
+        missing = [name for name, value in required.items() if not value]
+        if missing:
+            # Pydantic wraps this ValueError in a ValidationError that names the problem.
+            raise ValueError(f"PROVIDER={self.provider} needs: {', '.join(missing)}")
+        return self
 
 
 @lru_cache
 def get_settings() -> Settings:
     """Return one shared Settings instance (a lazy singleton).
 
-    TODO (1.1): construct and return Settings(). `@lru_cache` makes later calls reuse it.
+    `@lru_cache` memoizes the call, so later calls reuse the first instance
+    (≈ services.AddSingleton). Tests call `get_settings.cache_clear()` to reset it.
     """
-    raise NotImplementedError
+    return Settings()
