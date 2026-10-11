@@ -10,6 +10,7 @@ compared with its C# equivalent.
 
 | Start here | |
 |---|---|
+| [Progress tracker](https://claude.ai/artifact/Nor3uG581TeukjntZ4WMAe) | Tick off every step; always shows your next step and command (private to you) |
 | [docs/SETUP.md](docs/SETUP.md) | Install uv, open in VS Code, run the checks |
 | [docs/ROADMAP.md](docs/ROADMAP.md) | Modules, lessons and deliverables |
 | [docs/PYTHON_CONCEPTS.md](docs/PYTHON_CONCEPTS.md) | Which Python features and stdlib modules each lesson teaches |
