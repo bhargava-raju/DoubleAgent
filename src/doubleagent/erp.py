@@ -4,11 +4,14 @@ In Module 3 this becomes a real HTTP service; for now it reads a JSON file.
 """
 
 import json
+import logging
 from datetime import date
 from pathlib import Path
 from typing import Literal
 
 from pydantic import BaseModel
+
+logger = logging.getLogger(__name__)
 
 DEFAULT_SUPPLIERS_FILE = Path(__file__).resolve().parents[2] / "data" / "erp" / "suppliers.json"
 
@@ -35,16 +38,21 @@ class SupplierDirectory:
     @classmethod
     def from_json_file(cls, path: Path = DEFAULT_SUPPLIERS_FILE) -> "SupplierDirectory":
         raw = json.loads(path.read_text(encoding="utf-8"))
-        return cls([Supplier.model_validate(item) for item in raw])
+        suppliers = [Supplier.model_validate(item) for item in raw]
+        logger.info("loaded %d suppliers from %s", len(suppliers), path.name)
+        return cls(suppliers)
 
     def search(self, query: str) -> list[Supplier]:
         """Find suppliers by id (exact) or name (contains), ignoring case. Blank query -> []."""
         # casefold() is the Unicode-correct ToLowerInvariant() for comparisons.
         q = query.strip().casefold()
         if not q:
+            logger.debug("search with a blank query -> no matches")
             return []
         # List comprehensions are LINQ: suppliers.Where(s => ...).ToList().
         exact = [s for s in self._suppliers if s.id.casefold() == q]
         partial = [s for s in self._suppliers if q in s.name.casefold()]
         # `or` returns a value: `exact` if it's non-empty (truthy), else `partial`.
-        return exact or partial
+        found = exact or partial
+        logger.debug("search %r -> %d match(es)", query, len(found))
+        return found

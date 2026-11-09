@@ -5,11 +5,14 @@ name, description and JSON Schema below; our code decides whether and how to run
 """
 
 import json
+import logging
 from typing import Any
 
 from anthropic.types import ToolParam
 
 from doubleagent.erp import SupplierDirectory
+
+logger = logging.getLogger(__name__)
 
 LOOKUP_SUPPLIER = "lookup_supplier"
 
@@ -48,11 +51,14 @@ def execute_tool(name: str, tool_input: dict[str, Any], directory: SupplierDirec
     """
     # Allow-list of tool names (C#: a switch with a default that throws).
     if name != LOOKUP_SUPPLIER:
+        logger.warning("model asked for unknown tool %r", name)
         raise ToolError(f"Unknown tool: {name}")
     query = tool_input.get("query")
     # isinstance(x, str) is C#'s `x is string`.
     if not isinstance(query, str):
+        logger.warning("bad input for %s: %r", name, tool_input)
         raise ToolError("lookup_supplier needs a string 'query'")
     matches = directory.search(query)
+    logger.info("%s(query=%r) -> %d match(es)", name, query, len(matches))
     # model_dump(mode="json") makes JSON-safe dicts (dates become ISO strings).
     return json.dumps({"matches": [s.model_dump(mode="json") for s in matches]})

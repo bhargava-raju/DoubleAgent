@@ -4,6 +4,7 @@ Keeping Streamlit code out of here means the UI stays thin and this layer stays 
 C# analogy: an application-service layer that controllers/Blazor components call.
 """
 
+import logging
 from collections.abc import Sequence
 
 from pydantic import ValidationError  # noqa: F401  (you will need these)
@@ -13,6 +14,8 @@ from doubleagent.client import create_client  # noqa: F401
 from doubleagent.config import get_settings  # noqa: F401
 from doubleagent.erp import SupplierDirectory  # noqa: F401
 from doubleagent.scorecard import ScorecardRow, compare_models  # noqa: F401
+
+logger = logging.getLogger(__name__)
 
 
 def config_error() -> str | None:

@@ -10,6 +10,9 @@ import logging
 from doubleagent.client import create_client
 from doubleagent.config import get_settings
 from doubleagent.llm import ask
+from doubleagent.logging_setup import configure_logging
+
+logger = logging.getLogger(__name__)
 
 
 def build_parser() -> argparse.ArgumentParser:
@@ -55,7 +58,9 @@ def main() -> None:
     (C#: `Main` calling `RunAsync().GetAwaiter().GetResult()`).
     """
     args = build_parser().parse_args()
-    logging.basicConfig(level=logging.INFO)
+    configure_logging()  # INFO until settings tell us the real level
+    configure_logging(get_settings().log_level)  # cached, so _run reuses the same Settings
+    logger.info("command %r started", args.command)
     asyncio.run(_run(args))
 
 

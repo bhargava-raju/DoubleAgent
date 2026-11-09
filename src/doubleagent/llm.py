@@ -3,8 +3,13 @@
 This is a *chatbot* building block: one question in, one answer out. No tools, no loop.
 """
 
+import logging
+import time
+
 from anthropic import AsyncAnthropic, omit
 from pydantic import BaseModel
+
+logger = logging.getLogger(__name__)
 
 
 class Answer(BaseModel):
@@ -29,6 +34,9 @@ async def ask(
     C# analogy: `Task<Answer> AskAsync(...)` wrapping one HTTP call and mapping the result
     to a record.
     """
+    logger.debug("ask: model=%s max_tokens=%d question_chars=%d", model, max_tokens, len(question))
+    # perf_counter() is a monotonic high-resolution clock (C#: Stopwatch).
+    started = time.perf_counter()
     response = await client.messages.create(
         model=model,
         max_tokens=max_tokens,
@@ -42,6 +50,18 @@ async def ask(
     # A generator expression inside join. C#:
     # `string.Join("", content.OfType<TextBlock>().Select(b => b.Text))`.
     text = "".join(block.text for block in response.content if block.type == "text")
+
+    elapsed_ms = (time.perf_counter() - started) * 1000
+    logger.info(
+        "llm call: model=%s %.0f ms, %d in / %d out tokens, stop_reason=%s",
+        model,
+        elapsed_ms,
+        response.usage.input_tokens,
+        response.usage.output_tokens,
+        response.stop_reason,
+    )
+    if response.stop_reason == "max_tokens":
+        logger.warning("answer truncated at max_tokens=%d", max_tokens)
 
     return Answer(
         text=text,

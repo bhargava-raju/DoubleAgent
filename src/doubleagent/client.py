@@ -7,9 +7,13 @@ works end to end; because the rest of the app only depends on `AsyncAnthropic`, 
 only touches this file.
 """
 
+import logging
+
 from anthropic import AsyncAnthropic
 
 from doubleagent.config import Settings
+
+logger = logging.getLogger(__name__)
 
 
 def create_client(settings: Settings) -> AsyncAnthropic:
@@ -24,4 +28,8 @@ def create_client(settings: Settings) -> AsyncAnthropic:
     if key is None:
         raise ValueError("ANTHROPIC_API_KEY is not set")
     # SecretStr hides the value in logs; unwrap it only where the SDK needs the real string.
-    return AsyncAnthropic(api_key=key.get_secret_value())
+    client = AsyncAnthropic(api_key=key.get_secret_value())
+    logger.debug(
+        "Anthropic client created (max_retries=%d, timeout=%s)", client.max_retries, client.timeout
+    )
+    return client

@@ -2,6 +2,7 @@
 
 import asyncio  # noqa: F401  (bonus: asyncio.gather)
 import csv  # noqa: F401  (you will need it)
+import logging
 import time  # noqa: F401  (you will need it)
 from collections.abc import Sequence
 from dataclasses import dataclass
@@ -11,6 +12,9 @@ from anthropic import AsyncAnthropic
 from pydantic import BaseModel
 
 from doubleagent.llm import ask  # noqa: F401  (you will need it)
+
+# Log each model's latency, tokens and cost as you score it.
+logger = logging.getLogger(__name__)
 
 
 @dataclass(frozen=True, slots=True)
