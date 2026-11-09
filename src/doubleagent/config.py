@@ -9,13 +9,15 @@ from typing import Literal, Self
 from pydantic import Field, SecretStr, model_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
-DEFAULT_MODEL = "claude-opus-5-5"
+DEFAULT_MODEL = "claude-sonnet-5-5"
 # Literal allows only the listed strings (≈ an enum).
 Provider = Literal["anthropic", "foundry"]
 
 
 class Settings(BaseSettings):
-    """Reads fields from env vars or `.env` (`max_tokens` <- MAX_TOKENS). Real env vars win over `.env`."""
+    """Reads fields from env vars or `.env` (`max_tokens` <- MAX_TOKENS)."""
+
+    """ Real env vars win over `.env`."""
 
     # extra="ignore": unrelated variables in .env are not errors.
     model_config = SettingsConfigDict(env_file=".env", extra="ignore")
