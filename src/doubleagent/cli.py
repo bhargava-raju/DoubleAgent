@@ -7,8 +7,10 @@ import argparse
 import asyncio
 import logging
 
+from doubleagent.agent import run_agent
 from doubleagent.client import create_client
 from doubleagent.config import get_settings
+from doubleagent.erp import SupplierDirectory
 from doubleagent.llm import ask
 from doubleagent.logging_setup import configure_logging
 
@@ -48,8 +50,18 @@ async def _run(args: argparse.Namespace) -> None:
                 )
                 if answer.stop_reason == "max_tokens":
                     print("Warning: the answer was cut off; raise MAX_TOKENS.")
+            case "agent":
+                result = await run_agent(
+                    client,
+                    args.question,
+                    SupplierDirectory.from_json_file(),
+                    model=settings.model,
+                    max_tokens=settings.max_tokens,
+                )
+                print(result.answer)
+                print(f"\n[{result.turns} turn(s), tools used: {result.tool_calls or 'none'}]")
             case _:
-                # TODO (1.2): "agent" -> agent.run_agent; (1.3): "compare" -> scorecard.
+                # TODO (1.3): "compare" -> scorecard.compare_models.
                 raise NotImplementedError(f"command {args.command!r} is not implemented yet")
 
 
