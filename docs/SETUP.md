@@ -18,7 +18,7 @@ git clone https://github.com/bhargava-raju/DoubleAgent.git
 cd DoubleAgent
 git checkout claude/project-thread-qjq7wy
 uv sync                      # creates .venv and installs exact versions from uv.lock
-cp .env.example .env         # then choose: Anthropic API key, or your Microsoft Foundry resource
+cp .env.example .env         # then add your Anthropic API key
 code .
 ```
 
@@ -76,7 +76,9 @@ In VS Code: F5 → **DoubleAgent UI (Streamlit)**, or the task **ui: run DoubleA
 
 These raise `NotImplementedError` until you complete the Module 1 exercises.
 
-## 6. Using Microsoft Foundry (Azure) instead of an Anthropic key
+## 6. Using Microsoft Foundry (Azure) instead of an Anthropic key (deferred)
+
+> Deferred: the agent targets Claude Sonnet on the Anthropic API until it works end to end. Keep these steps for later.
 
 1. In the Foundry portal, open **Models → Deployments → Deploy** (the same screen as your GPT deployment) and deploy a Claude model from the catalog, e.g.
    `claude-sonnet-5-5` or `claude-haiku-4-5`. Name the deployment after the model id to keep things simple.

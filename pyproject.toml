@@ -30,6 +30,10 @@ dev = [
 [tool.pytest.ini_options]
 asyncio_mode = "auto"
 testpaths = ["tests"]
+# Foundry support is deferred until the agent works end to end with Claude Sonnet.
+# Run those specs later with: uv run pytest -m foundry
+addopts = "-m 'not foundry'"
+markers = ["foundry: Microsoft Foundry provider (deferred)"]
 
 [tool.ruff]
 line-length = 100
