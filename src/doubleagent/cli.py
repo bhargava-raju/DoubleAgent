@@ -4,6 +4,12 @@ C# analogy: `static async Task Main(string[] args)` plus System.CommandLine.
 """
 
 import argparse
+import asyncio
+import logging
+
+from doubleagent.client import create_client
+from doubleagent.config import get_settings
+from doubleagent.llm import ask
 
 
 def build_parser() -> argparse.ArgumentParser:
@@ -20,19 +26,37 @@ def build_parser() -> argparse.ArgumentParser:
     return parser
 
 
+async def _run(args: argparse.Namespace) -> None:
+    """The async part of the program (C#: the body of `async Task Main`)."""
+    settings = get_settings()
+    # `async with` disposes the client when the block ends (C#: `await using`).
+    async with create_client(settings) as client:
+        # `match` is Python's switch statement; `case _` is `default`.
+        match args.command:
+            case "ask":
+                answer = await ask(
+                    client, args.question, model=settings.model, max_tokens=settings.max_tokens
+                )
+                print(answer.text)
+                # First telemetry: tokens in/out and why the model stopped.
+                print(
+                    f"\n[{answer.input_tokens} in / {answer.output_tokens} out tokens, "
+                    f"stop_reason={answer.stop_reason}]"
+                )
+                if answer.stop_reason == "max_tokens":
+                    print("Warning: the answer was cut off; raise MAX_TOKENS.")
+            case _:
+                # TODO (1.2): "agent" -> agent.run_agent; (1.3): "compare" -> scorecard.
+                raise NotImplementedError(f"command {args.command!r} is not implemented yet")
+
+
 def main() -> None:
-    """TODO: parse args, load settings, open
-    `async with create_client(settings) as client:` (client.py),
-    and dispatch on args.command with a `match` statement (C#: switch expression) to
-    llm.ask (1.1), agent.run_agent (1.2) or scorecard.compare_models (1.3).
-
-    Also: call logging.basicConfig(level=logging.INFO) once here, and for `compare`, print the
-    Markdown table and save a CSV under reports/ (scorecard.write_csv).
-
-    Hint: keep main() synchronous and bridge with asyncio.run(_run(args)).
+    """Parse args, then bridge from sync to async with asyncio.run
+    (C#: `Main` calling `RunAsync().GetAwaiter().GetResult()`).
     """
     args = build_parser().parse_args()
-    raise NotImplementedError(f"command {args.command!r} is not implemented yet")
+    logging.basicConfig(level=logging.INFO)
+    asyncio.run(_run(args))
 
 
 if __name__ == "__main__":  # lets `python -m doubleagent.cli` (and the VS Code debugger) run it
