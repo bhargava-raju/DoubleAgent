@@ -15,9 +15,13 @@ from doubleagent.config import Settings
 def create_client(settings: Settings) -> AsyncAnthropic:
     """Return an async Anthropic client built from `settings`.
 
-    TODO (1.1):
-      - Return AsyncAnthropic(api_key=...).
-      - Use `.get_secret_value()` to unwrap the SecretStr key.
-      The caller owns the client and closes it with `async with create_client(s) as client:`.
+    The caller owns the client and closes it with `async with create_client(s) as client:`
+    (C#: `await using var client = ...`).
     """
-    raise NotImplementedError
+    key = settings.anthropic_api_key
+    # The type is `SecretStr | None`, so narrow it before use (C#: a null check on a nullable).
+    # Settings already validated this; the check keeps pyright and future refactors honest.
+    if key is None:
+        raise ValueError("ANTHROPIC_API_KEY is not set")
+    # SecretStr hides the value in logs; unwrap it only where the SDK needs the real string.
+    return AsyncAnthropic(api_key=key.get_secret_value())
