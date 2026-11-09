@@ -38,11 +38,13 @@ class SupplierDirectory:
         return cls([Supplier.model_validate(item) for item in raw])
 
     def search(self, query: str) -> list[Supplier]:
-        """Find suppliers by id or name.
-
-        TODO (1.2):
-          - an exact, case-insensitive match on `id` returns just that supplier
-          - otherwise return every supplier whose name contains `query`, case-insensitively
-          - a blank query returns an empty list
-        """
-        raise NotImplementedError
+        """Find suppliers by id (exact) or name (contains), ignoring case. Blank query -> []."""
+        # casefold() is the Unicode-correct ToLowerInvariant() for comparisons.
+        q = query.strip().casefold()
+        if not q:
+            return []
+        # List comprehensions are LINQ: suppliers.Where(s => ...).ToList().
+        exact = [s for s in self._suppliers if s.id.casefold() == q]
+        partial = [s for s in self._suppliers if q in s.name.casefold()]
+        # `or` returns a value: `exact` if it's non-empty (truthy), else `partial`.
+        return exact or partial
