@@ -24,7 +24,7 @@ st.title("DoubleAgent")
 #    and call st.stop() so nothing else renders. (Tip: the walrus operator `:=`.)
 #
 # 2. Sidebar (`with st.sidebar:`):
-#      - a model st.selectbox over the PRICES keys, defaulting to "claude-opus-5-5"
+#      - a model st.selectbox over the PRICES keys, defaulting to "claude-sonnet-5-5"
 #      - a "Max agent turns" st.slider from 1 to 10, default 5
 #      - a "New conversation" st.button with key="new_conversation" that empties the history
 #

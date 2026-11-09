@@ -67,6 +67,7 @@ def test_get_settings_is_cached(monkeypatch: pytest.MonkeyPatch) -> None:
     assert get_settings() is get_settings()
 
 
+@pytest.mark.foundry
 def test_foundry_settings(monkeypatch: pytest.MonkeyPatch) -> None:
     monkeypatch.setenv("PROVIDER", "foundry")
     monkeypatch.setenv("ANTHROPIC_FOUNDRY_API_KEY", "az-key")
@@ -77,6 +78,7 @@ def test_foundry_settings(monkeypatch: pytest.MonkeyPatch) -> None:
     assert settings.anthropic_api_key is None  # not needed for Foundry
 
 
+@pytest.mark.foundry
 @pytest.mark.parametrize(
     ("env", "missing"),
     [
@@ -108,6 +110,7 @@ async def test_create_client_anthropic(monkeypatch: pytest.MonkeyPatch) -> None:
         assert client.api_key == "sk-test"
 
 
+@pytest.mark.foundry
 async def test_create_client_foundry(monkeypatch: pytest.MonkeyPatch) -> None:
     monkeypatch.setenv("PROVIDER", "foundry")
     monkeypatch.setenv("ANTHROPIC_FOUNDRY_API_KEY", "az-key")
